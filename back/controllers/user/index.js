@@ -6,6 +6,8 @@ const retrieve = require("./retrieve");
 const retrieveAll = require("./retrieveAll");
 const sendInvitation = require("./sendInvitation");
 const getInvitations = require("./getInvitations");
+const rejectInvitation = require("./rejectInvitation");
+const removeInvitation = require("./removeInvitation");
 
 module.exports = {
   signup,
@@ -16,4 +18,6 @@ module.exports = {
   retrieveAll,
   sendInvitation,
   getInvitations,
+  rejectInvitation,
+  removeInvitation,
 };

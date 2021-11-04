@@ -8,6 +8,17 @@ const reqString = {
   required: true,
 };
 
+const invitationSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  from: reqString,
+});
+
+const myinvitationSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  to: reqString,
+  status: String,
+});
+
 const userSchema = new Schema(
   {
     name: reqString,
@@ -32,6 +43,8 @@ const userSchema = new Schema(
         msg: "Error in password",
       },
     },
+    invitations: [invitationSchema],
+    myInvitations: [myinvitationSchema],
   },
   { timestamps: true }
 );

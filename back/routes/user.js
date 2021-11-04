@@ -11,5 +11,7 @@ router.route("/retrieve/:userId").get(userControllers.retrieve);
 router.route("/retrieve-all").get(userControllers.retrieveAll);
 router.route("/send-invitation").put(userControllers.sendInvitation);
 router.route("/get-invitations").get(userControllers.getInvitations);
+router.route("/reject-invitation").delete(userControllers.rejectInvitation);
+router.route("/remove-invitation").delete(userControllers.removeInvitation);
 
 module.exports = router;
