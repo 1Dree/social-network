@@ -8,6 +8,7 @@ const sendInvitation = require("./sendInvitation");
 const getInvitations = require("./getInvitations");
 const rejectInvitation = require("./rejectInvitation");
 const removeInvitation = require("./removeInvitation");
+const acceptInvitation = require("./acceptInvitation");
 
 module.exports = {
   signup,
@@ -20,4 +21,5 @@ module.exports = {
   getInvitations,
   rejectInvitation,
   removeInvitation,
+  acceptInvitation,
 };

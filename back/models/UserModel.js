@@ -8,20 +8,38 @@ const reqString = {
   required: true,
 };
 
+const emailValidator = async value => {
+  const alreadyExist = await mongoose.models.user.countDocuments({
+    email: value,
+  });
+  const formatted = /^[a-zA-z0-9]{1,}@(gmail|hotmail).com$/;
+
+  return !alreadyExist && formatted;
+};
+
+const invitation = (nameKey, complement) =>
+  new Schema({
+    _id: Schema.Types.ObjectId,
+    [nameKey]: reqString,
+    ...complement,
+  });
+
+const myInvitationsSchema = invitation("to", { status: reqString });
+const invitationsSchema = invitation("from");
+
+const friendsSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  name: reqString,
+  roomId: Schema.Types.ObjectId,
+});
+
 const userSchema = new Schema(
   {
     name: reqString,
     email: {
       ...reqString,
       validate: {
-        validator: async value => {
-          const alreadyExist = await mongoose.models.user.countDocuments({
-            email: value,
-          });
-          const formatted = /^[a-zA-z0-9]{1,}@(gmail|hotmail).com$/;
-
-          return !alreadyExist && formatted;
-        },
+        validator: emailValidator,
         msg: "Error in email field",
       },
     },
@@ -32,7 +50,11 @@ const userSchema = new Schema(
         msg: "Error in password",
       },
     },
+    friends: [friendsSchema],
+    myInvitations: [myInvitationsSchema],
+    invitations: [invitationsSchema],
   },
+
   { timestamps: true }
 );
 

@@ -4,6 +4,7 @@ const methodOverride = require("method-override");
 const cors = require("cors");
 
 const userRoute = require("./routes/user.js");
+const chatRoute = require("./routes/chat.js");
 
 require("dotenv").config();
 
@@ -29,3 +30,4 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoute);
+app.use("/chat", chatRoute);

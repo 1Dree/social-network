@@ -13,5 +13,6 @@ router.route("/send-invitation").put(userControllers.sendInvitation);
 router.route("/get-invitations").get(userControllers.getInvitations);
 router.route("/reject-invitation").delete(userControllers.rejectInvitation);
 router.route("/remove-invitation").delete(userControllers.removeInvitation);
+router.route("/accept-invitation").put(userControllers.acceptInvitation);
 
 module.exports = router;

@@ -1,29 +1,45 @@
-const {
-  MyInvitationModel,
-  InvitationModel,
-} = require("../../models/InvitationModel");
+const UserModel = require("../../models/UserModel");
 const mongoose = require("mongoose");
 
 module.exports = async function sendInvitation(req, res) {
   const { userData, invitedUserData } = req.body;
   if (!userData || !invitedUserData) return res.sendStatus(400);
 
-  //   res.json(req.body);
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const [myInvitations] = await MyInvitationModel.create([invitedUserData], {
-      session,
-      new: true,
-    });
+    const invitation = await UserModel.findOne(
+      { _id: userData._id, "myInvitations._id": invitedUserData._id },
+      "-_id myInvitations._id"
+    );
 
-    await InvitationModel.create([userData], { session });
+    if (invitation) return res.status(400).json("invitation already made");
+
+    const userDoc = await UserModel.findByIdAndUpdate(
+      userData._id,
+      {
+        $push: { myInvitations: invitedUserData },
+      },
+      {
+        session,
+        new: true,
+        select: "-_id myInvitations",
+      }
+    );
+
+    await UserModel.findByIdAndUpdate(
+      invitedUserData._id,
+      {
+        $push: { invitations: userData },
+      },
+      { session }
+    );
 
     await session.commitTransaction();
     session.endSession();
 
-    res.json({ data: myInvitations });
+    res.json(userDoc);
   } catch (err) {
     session.abortTransaction();
     console.log(err);
