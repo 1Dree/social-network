@@ -11,6 +11,7 @@ const messageSchema = new Schema(
   {
     content: reqString,
     from: Schema.Types.ObjectId,
+    hideFrom: [{ userId: Schema.Types.ObjectId }],
   },
   { timestamps: true }
 );
