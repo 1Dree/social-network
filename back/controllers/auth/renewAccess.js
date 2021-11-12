@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
-const UserModel = require("../models/UserModel");
-const RefreshTokenModel = require("../models/RefreshTokenModel");
-const bcrypt = require("bcryptjs");
+const RefreshTokenModel = require("../../models/RefreshTokenModel");
 const jwt = require("jsonwebtoken");
 
-const { generateAccessToken } = require("../lib");
+const { generateAccessToken } = require("../../lib");
 
 module.exports = async function renewAccess(req, res, next) {
   const { refreshtoken } = req.headers;
@@ -34,7 +32,7 @@ module.exports = async function renewAccess(req, res, next) {
         if (err) {
           console.log(err);
 
-          return res.sendStatus(403);
+          return res.status(403).json(err.message);
         }
 
         const accessToken = generateAccessToken(data);

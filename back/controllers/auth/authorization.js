@@ -6,7 +6,7 @@ module.exports = async function authorization(req, res, next) {
   if (!authorization || !accessToken) return res.sendStatus(401);
 
   jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.status(403).json(err.message);
 
     req.user = data;
 

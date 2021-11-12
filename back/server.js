@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const cors = require("cors");
 
-const userRoute = require("./routes/user.js");
+const accountRoute = require("./routes/account.js");
 const chatRoute = require("./routes/chat.js");
+const invitRoute = require("./routes/invit.js");
 
 require("dotenv").config();
 
@@ -25,9 +26,24 @@ mongoose
   })
   .catch(console.log);
 
-app.get("/", (req, res) => {
-  res.json("hello");
+const conn = mongoose.connection;
+let gfs, db;
+
+conn.once("open", () => {
+  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: "uploads",
+  });
+  db = conn.db;
 });
 
-app.use("/user", userRoute);
+const midProvider = (req, res, next) => {
+  req.gfs = gfs;
+  req.db = db;
+  next();
+};
+
+app.use(midProvider);
+
+app.use("/account", accountRoute);
 app.use("/chat", chatRoute);
+app.use("/invit", invitRoute);

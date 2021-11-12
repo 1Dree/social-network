@@ -1,17 +1,22 @@
 const RoomModel = require("../../models/RoomModel");
+const mongoose = require("mongoose");
 
-module.exports = async function sendInvitation(req, res) {
+module.exports = async function retrieveMsgs(req, res) {
   const { userId, roomId } = req.body;
   if (!userId || !roomId) return res.sendStatus(400);
 
   try {
-    let roomMessages = await RoomModel.findById(roomId, "-id messages");
-    roomMessages = roomMessages.filter();
+    let { messages } = await RoomModel.findById(roomId, "-_id messages");
 
-    res.json(roomMessages);
+    messages = messages.filter(
+      message =>
+        !message.hideFrom.length ||
+        message.hideFrom.some(id => id.toString() !== userId)
+    );
+
+    res.json({ messages });
   } catch (err) {
     console.log(err);
-
     res.json(err.message);
   }
 };

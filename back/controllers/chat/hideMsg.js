@@ -12,7 +12,7 @@ module.exports = async function sendInvitation(req, res) {
     const alreadyHidden = await RoomModel.findOne(
       {
         _id: roomId,
-        "messages.hideFrom.userId": userId,
+        "messages.hideFrom": userId,
       },
       null,
       { session }
@@ -23,7 +23,7 @@ module.exports = async function sendInvitation(req, res) {
 
     const roomMessages = await RoomModel.findOneAndUpdate(
       { _id: roomId, "messages._id": messageId },
-      { $push: { "messages.$.hideFrom": { userId } } },
+      { $push: { "messages.$.hideFrom": userId } },
       { session, new: true, select: "-_id messages" }
     );
 

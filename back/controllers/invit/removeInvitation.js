@@ -2,6 +2,7 @@ const UserModel = require("../../models/UserModel");
 
 module.exports = async function rejectInvitation(req, res) {
   const { userId, invitedId } = req.body;
+  if (!userId || !invitedId) return res.sendStatus(400);
 
   try {
     const userDoc = await UserModel.findByIdAndUpdate(

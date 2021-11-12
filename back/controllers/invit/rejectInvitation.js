@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 
 module.exports = async function rejectInvitation(req, res) {
   const { userId, inviterId } = req.body;
+  if (!userId || !inviterId) return res.sendStatus(400);
 
-  //   res.json(req.body);
+  // res.json(req.body);
   const session = await mongoose.startSession();
   session.startTransaction();
 

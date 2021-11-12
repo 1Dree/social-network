@@ -9,9 +9,10 @@ const reqString = {
 
 const messageSchema = new Schema(
   {
+    type: reqString,
     content: reqString,
     from: Schema.Types.ObjectId,
-    hideFrom: [{ userId: Schema.Types.ObjectId }],
+    hideFrom: [Schema.Types.ObjectId],
   },
   { timestamps: true }
 );
