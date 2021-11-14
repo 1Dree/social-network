@@ -1,7 +1,7 @@
 const RoomModel = require("../../models/RoomModel");
 const mongoose = require("mongoose");
 
-module.exports = async function retrieveMsgs({ body, gfs }, res) {
+module.exports = async function retrieveMsgs({ body, gfs, accessToken }, res) {
   const { roomId, messageInfo } = body;
   if (!roomId || !messageInfo) return res.sendStatus(400);
 
@@ -21,7 +21,7 @@ module.exports = async function retrieveMsgs({ body, gfs }, res) {
       await gfs.delete(new mongoose.Types.ObjectId(messageInfo.fileId));
     }
 
-    res.json({ messages });
+    res.json({ messages, accessToken });
   } catch (err) {
     console.log(err);
     res.json(err.message);

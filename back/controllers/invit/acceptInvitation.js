@@ -2,8 +2,8 @@ const UserModel = require("../../models/UserModel");
 const RoomModel = require("../../models/RoomModel");
 const mongoose = require("mongoose");
 
-module.exports = async function acceptInvitation(req, res) {
-  const { userData, inviterData } = req.body;
+module.exports = async function acceptInvitation({ body, accessToken }, res) {
+  const { userData, inviterData } = body;
   if (!userData || !inviterData) return res.sendStatus(400);
 
   const session = await mongoose.startSession();
@@ -53,7 +53,7 @@ module.exports = async function acceptInvitation(req, res) {
     await session.commitTransaction();
     session.endSession();
 
-    res.json(userDoc);
+    res.json({ ...userDoc, accessToken });
   } catch (err) {
     session.abortTransaction();
     console.log(err);

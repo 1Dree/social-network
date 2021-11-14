@@ -1,11 +1,11 @@
 const UserModel = require("../../models/UserModel");
 
-module.exports = async function rejectInvitation(req, res) {
-  const { userId, invitedId } = req.body;
+module.exports = async function rejectInvitation({ body, accessToken }, res) {
+  const { userId, invitedId } = body;
   if (!userId || !invitedId) return res.sendStatus(400);
 
   try {
-    const userDoc = await UserModel.findByIdAndUpdate(
+    const { myInvitations } = await UserModel.findByIdAndUpdate(
       userId,
       {
         $pull: { myInvitations: { _id: invitedId } },
@@ -13,7 +13,7 @@ module.exports = async function rejectInvitation(req, res) {
       { new: true, select: "-_id myInvitations" }
     );
 
-    res.json(userDoc);
+    res.json({ myInvitations, accessToken });
   } catch (err) {
     console.log(err);
     res.json(err.message);

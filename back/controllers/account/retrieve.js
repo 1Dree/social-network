@@ -4,11 +4,10 @@ const RefreshTokenModel = require("../../models/RefreshTokenModel");
 
 const { userCoreData } = require("../../lib");
 
-module.exports = async function retrieve(req, res) {
-  const { userId } = req.params;
+module.exports = async function retrieve({ params, accessToken }, res) {
+  const { userId } = params;
   if (!userId) return res.sendStatus(400);
 
-  // res.json({ userId });
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -30,6 +29,7 @@ module.exports = async function retrieve(req, res) {
     res.json({
       userData: userCoreData(userDoc),
       refreshToken: token,
+      accessToken,
     });
   } catch (err) {
     await session.abortTransaction();

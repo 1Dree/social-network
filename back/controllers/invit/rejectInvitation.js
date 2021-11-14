@@ -1,16 +1,15 @@
 const UserModel = require("../../models/UserModel");
 const mongoose = require("mongoose");
 
-module.exports = async function rejectInvitation(req, res) {
-  const { userId, inviterId } = req.body;
+module.exports = async function rejectInvitation({ body, accessToken }, res) {
+  const { userId, inviterId } = body;
   if (!userId || !inviterId) return res.sendStatus(400);
 
-  // res.json(req.body);
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const userDoc = await UserModel.findByIdAndUpdate(
+    const { invitations } = await UserModel.findByIdAndUpdate(
       userId,
       {
         $pull: { invitations: { _id: inviterId } },
@@ -34,7 +33,7 @@ module.exports = async function rejectInvitation(req, res) {
     await session.commitTransaction();
     session.endSession();
 
-    res.json(userDoc);
+    res.json({ invitations, accessToken });
   } catch (err) {
     session.abortTransaction();
     console.log(err);

@@ -9,7 +9,6 @@ module.exports = async function login(req, res) {
   const { userData } = req.body;
   if (!userData) return res.sendStatus(400);
 
-  // res.json({ userData });
   const session = await mongoose.startSession();
   session.startTransaction();
 

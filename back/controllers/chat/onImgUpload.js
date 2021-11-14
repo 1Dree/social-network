@@ -40,7 +40,7 @@ module.exports = async function onImgUpload(
     res.json({
       // file,
       messages,
-      // , accessToken
+      accessToken,
     });
   } catch (err) {
     session.abortTransaction();

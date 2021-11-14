@@ -8,14 +8,9 @@ module.exports = async function updateProfile({ body, accessToken }, res) {
   let { userData, updationData } = body;
   if (!userData || !updationData) return res.sendStatus(400);
 
-  //   res.json(body);
-
   const upEntries = Object.entries(updationData);
 
-  if (
-    // upEntries.every(entry => entry[1] === "") ||
-    upEntries.some(([key, value]) => value === userData[key])
-  ) {
+  if (upEntries.some(([key, value]) => value === userData[key])) {
     return res.sendStatus(400);
   }
 
@@ -25,7 +20,6 @@ module.exports = async function updateProfile({ body, accessToken }, res) {
     return acc;
   }, {});
 
-  // res.json({ userData, updationData });
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -51,12 +45,12 @@ module.exports = async function updateProfile({ body, accessToken }, res) {
 
     res.json({
       userData: userCoreData(userUpdatedDoc),
-      //   accessToken,
+      accessToken,
     });
   } catch (err) {
     session.abortTransaction();
 
     console.log(err);
-    res.sendStatus(400);
+    res.status(400).json(err.message);
   }
 };

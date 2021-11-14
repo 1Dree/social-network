@@ -1,7 +1,7 @@
 const UserModel = require("../../models/UserModel");
 
-module.exports = async function getInvitations(req, res) {
-  const { userId } = req.body;
+module.exports = async function getInvitations({ body, accessToken }, res) {
+  const { userId } = body;
   if (!userId) return res.sendStatus(400);
 
   try {
@@ -10,7 +10,7 @@ module.exports = async function getInvitations(req, res) {
       "-_id myInvitations invitations"
     );
 
-    res.json(invitations);
+    res.json({ ...invitations, accessToken });
   } catch (err) {
     console.log(err);
     res.json(err.message);

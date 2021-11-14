@@ -1,29 +1,23 @@
-const mongoose = require("mongoose");
 const RefreshTokenModel = require("../../models/RefreshTokenModel");
 const jwt = require("jsonwebtoken");
 
 const { generateAccessToken } = require("../../lib");
 
 module.exports = async function renewAccess(req, res, next) {
-  const { refreshtoken } = req.headers;
+  const { refreshtoken, userid: userId } = req.headers;
 
   if (!refreshtoken) {
     return res.status(400).json("No refreshToken was provided.");
   }
 
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  if (!userId) return res.sendStatus(400);
 
   try {
-    const tokenDoc = await RefreshTokenModel.findOne(
-      { token: refreshtoken },
-      null,
-      { session }
-    );
+    const tokenDoc = await RefreshTokenModel.findOne({
+      token: refreshtoken,
+      userId,
+    });
     if (!tokenDoc) return res.sendStatus(404);
-
-    await session.commitTransaction();
-    session.endSession();
 
     jwt.verify(
       tokenDoc.token,

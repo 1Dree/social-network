@@ -1,8 +1,8 @@
 const UserModel = require("../../models/UserModel");
 const mongoose = require("mongoose");
 
-module.exports = async function sendInvitation(req, res) {
-  const { userData, invitedUserData } = req.body;
+module.exports = async function sendInvitation({ body, accessToken }, res) {
+  const { userData, invitedUserData } = body;
   if (!userData || !invitedUserData) return res.sendStatus(400);
 
   const session = await mongoose.startSession();
@@ -16,7 +16,7 @@ module.exports = async function sendInvitation(req, res) {
 
     if (invitation) return res.status(400).json("invitation already made");
 
-    const userDoc = await UserModel.findByIdAndUpdate(
+    const { myInvitations } = await UserModel.findByIdAndUpdate(
       userData._id,
       {
         $push: { myInvitations: invitedUserData },
@@ -39,7 +39,7 @@ module.exports = async function sendInvitation(req, res) {
     await session.commitTransaction();
     session.endSession();
 
-    res.json(userDoc);
+    res.json({ myInvitations, accessToken });
   } catch (err) {
     session.abortTransaction();
     console.log(err);
