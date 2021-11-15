@@ -16,5 +16,6 @@ router
 router
   .route("/retrieve-all")
   .get(authorization, renewAccess, accountControls.retrieveAll);
+router.route("/signout").delete(authorization, accountControls.signout);
 
 module.exports = router;

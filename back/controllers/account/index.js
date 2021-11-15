@@ -4,6 +4,7 @@ const updateProfile = require("./updateProfile");
 const forgetPassword = require("./forgetPassword");
 const retrieve = require("./retrieve");
 const retrieveAll = require("./retrieveAll");
+const signout = require("./signout");
 
 module.exports = {
   signup,
@@ -12,4 +13,5 @@ module.exports = {
   forgetPassword,
   retrieve,
   retrieveAll,
+  signout,
 };

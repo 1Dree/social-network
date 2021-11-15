@@ -30,6 +30,9 @@ module.exports = async function login(req, res) {
       { session }
     );
 
+    await session.commitTransaction();
+    session.endSession();
+
     res.json({
       userData: assets.userCoreData(userDoc),
       accessToken,

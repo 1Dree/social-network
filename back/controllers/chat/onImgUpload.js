@@ -15,6 +15,7 @@ module.exports = async function onImgUpload(
         $set: {
           originalname: file.originalname,
           ownerId: query.ownerId,
+          roomId: query.roomId,
         },
       },
       { session }
