@@ -30,7 +30,7 @@ module.exports = async function updateProfile({ body, accessToken }, res) {
     if (!userDoc) return res.sendStatus(404);
 
     const passMatch = await bcrypt.compare(userData.password, userDoc.password);
-    if (!passMatch) return res.sendStatus(404);
+    if (!passMatch) return res.status(400).json("wrong password");
 
     const userUpdatedDoc = await UserModel.findByIdAndUpdate(
       userDoc._id,
@@ -48,7 +48,7 @@ module.exports = async function updateProfile({ body, accessToken }, res) {
       accessToken,
     });
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
 
     console.log(err);
     res.status(400).json(err.message);

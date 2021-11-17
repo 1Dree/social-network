@@ -4,6 +4,8 @@ const hideMsg = require("./hideMsg");
 const deleteMsg = require("./deleteMsg");
 const onImgUpload = require("./onImgUpload");
 const toFile = require("./toFile");
+const removeFriend = require("./removeFriend");
+const downloadImg = require("./downloadImg");
 
 module.exports = {
   sendMessage,
@@ -12,4 +14,6 @@ module.exports = {
   deleteMsg,
   onImgUpload,
   toFile,
+  removeFriend,
+  downloadImg,
 };

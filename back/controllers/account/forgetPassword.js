@@ -18,7 +18,7 @@ module.exports = async function forgetPassword({ body }, res) {
 
     res.sendStatus(200);
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
 
     console.log(err);
     res.sendStatus(400);

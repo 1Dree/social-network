@@ -24,7 +24,7 @@ module.exports = async function rejectInvitation({ body, accessToken }, res) {
       },
       {
         $set: {
-          "myInvitations.$.status": "Seu convite foi rejeitado",
+          "myInvitations.$.status": "rejected",
         },
       },
       { session }
@@ -35,7 +35,7 @@ module.exports = async function rejectInvitation({ body, accessToken }, res) {
 
     res.json({ invitations, accessToken });
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
     console.log(err);
     res.json(err.message);
   }

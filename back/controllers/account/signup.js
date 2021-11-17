@@ -36,7 +36,7 @@ module.exports = async function signup(req, res) {
       refreshToken,
     });
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
     console.log(err);
     res.status(400).json(err.message);
   }

@@ -1,5 +1,4 @@
 const RoomModel = require("../../models/RoomModel");
-const mongoose = require("mongoose");
 
 module.exports = async function retrieveMsgs({ body, accessToken }, res) {
   const { userId, roomId } = body;

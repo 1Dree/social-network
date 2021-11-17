@@ -13,10 +13,14 @@ module.exports = async function acceptInvitation({ body, accessToken }, res) {
     const userId = userData._id;
     const inviterId = inviterData._id;
 
-    const alreadyAFriend = await UserModel.findOne({
-      _id: userId,
-      "friends._id": inviterId,
-    });
+    const alreadyAFriend = await UserModel.findOne(
+      {
+        _id: userId,
+        "friends._id": inviterId,
+      },
+      null,
+      { session }
+    );
     if (alreadyAFriend) {
       return res.status(400).json("This is already your friend.");
     }
@@ -43,7 +47,7 @@ module.exports = async function acceptInvitation({ body, accessToken }, res) {
       },
       {
         $set: {
-          "myInvitations.$.status": "Seu convite foi aceito",
+          "myInvitations.$.status": "accepted",
         },
         $push: { friends: { roomId, ...userData } },
       },
@@ -53,9 +57,9 @@ module.exports = async function acceptInvitation({ body, accessToken }, res) {
     await session.commitTransaction();
     session.endSession();
 
-    res.json({ ...userDoc, accessToken });
+    res.json({ data: userDoc, accessToken });
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
     console.log(err);
     res.json(err.message);
   }

@@ -39,12 +39,11 @@ module.exports = async function onImgUpload(
     session.endSession();
 
     res.json({
-      // file,
       messages,
       accessToken,
     });
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
     console.log(err);
 
     res.status(400).json(err.message);

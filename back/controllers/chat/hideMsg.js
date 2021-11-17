@@ -32,7 +32,7 @@ module.exports = async function sendInvitation({ body, accessToken }, res) {
 
     res.json({ messages, accessToken });
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
     console.log(err);
     res.json(err.message);
   }

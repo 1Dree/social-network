@@ -37,8 +37,6 @@ module.exports = async function renewAccess(req, res, next) {
       }
     );
   } catch (err) {
-    session.abortTransaction();
-
     console.log(err);
     res.status(400).json(err.message);
   }
