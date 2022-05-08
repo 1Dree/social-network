@@ -8,53 +8,81 @@ const reqString = {
   required: true,
 };
 
+const profile = {
+  type: Schema.Types.Mixed,
+  default: "default",
+};
+
 const emailValidator = async value => {
   const alreadyExist = await mongoose.models.user.countDocuments({
-    email: value,
+    "login.email": value,
   });
   const formatted = /^[a-zA-z0-9]{1,}@(gmail|hotmail).com$/;
 
   return !alreadyExist && formatted;
 };
 
-const invitation = (nameKey, complement) =>
+const invitation = complement =>
   new Schema({
     _id: Schema.Types.ObjectId,
-    [nameKey]: reqString,
+    name: reqString,
+    profile,
+    mailbox: Schema.Types.ObjectId,
     ...complement,
   });
 
-const myInvitationsSchema = invitation("to", { status: reqString });
-const invitationsSchema = invitation("from");
+const sendedInvitationsSchema = invitation({
+  status: { ...reqString, default: "waiting" },
+});
+const receivedInvitationsSchema = invitation();
+
+const reqObjId = { type: Schema.Types.ObjectId, required: true };
 
 const friendsSchema = new Schema({
   _id: Schema.Types.ObjectId,
   name: reqString,
-  roomId: Schema.Types.ObjectId,
+  profile,
+  ltMsg: new Schema(
+    {
+      msgId: Schema.Types.ObjectId,
+      author: Schema.Types.ObjectId,
+      content: String,
+      moment: reqString,
+      type: reqString,
+    },
+    { timestamps: { createdAt: false, updateAt: false } }
+  ),
+  chatRoom: reqObjId,
+  mailbox: reqObjId,
 });
 
 const userSchema = new Schema(
   {
-    name: reqString,
-    email: {
-      ...reqString,
-      validate: {
-        validator: emailValidator,
-        msg: "Error in email field",
+    mailbox: reqObjId,
+    login: {
+      name: reqString,
+      email: {
+        ...reqString,
+        validate: {
+          validator: emailValidator,
+          msg: "This Email already exists",
+        },
       },
-    },
-    password: {
-      ...reqString,
-      validate: {
-        validator: value => /^[a-zA-z0-9]{1,8}$/.test(value),
-        msg: "Error in password",
+      password: {
+        ...reqString,
+        validate: {
+          validator: value => /^[a-zA-z0-9]{1,8}$/.test(value),
+          msg: "Error in password",
+        },
       },
+      profile,
     },
     friends: [friendsSchema],
-    myInvitations: [myInvitationsSchema],
-    invitations: [invitationsSchema],
+    invitations: {
+      sended: [sendedInvitationsSchema],
+      received: [receivedInvitationsSchema],
+    },
   },
-
   { timestamps: true }
 );
 
@@ -62,7 +90,7 @@ userSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
 
-    this.password = await bcrypt.hash(this.password, salt);
+    this.login.password = await bcrypt.hash(this.login.password, salt);
 
     next();
   } catch (err) {

@@ -2,53 +2,38 @@ const mongoose = require("mongoose");
 const UserModel = require("../../models/UserModel");
 const RoomModel = require("../../models/RoomModel");
 
-module.exports = async function removeFriend({ body, gfs, accessToken }, res) {
+module.exports = async function removeFriend({ body, gfs }, res) {
   const { userId, roomId, friendId } = body;
-  if (!userId || !roomId || !friendId) return res.sendStatus(400);
+  if (!userId || !roomId || !friendId)
+    return res.status(400).json("insufficient resources");
 
   const session = await mongoose.startSession();
-  session.startTransaction();
+  const update = userId => ({
+    $pull: { friends: { _id: userId } },
+  });
+  const options = { session };
 
   try {
-    const { friends } = await UserModel.findByIdAndUpdate(
-      userId,
-      {
-        $pull: { friends: { _id: friendId } },
-      },
-      {
-        session,
-        new: true,
-        select: "-_id friends",
+    await session.withTransaction(async () => {
+      await UserModel.findByIdAndUpdate(userId, update(friendId), options);
+      await UserModel.findByIdAndUpdate(friendId, update(userId), options);
+
+      await RoomModel.findByIdAndDelete(roomId, options);
+
+      const roomFiles = await gfs.find({ roomId }, options).toArray();
+
+      if (roomFiles.length) {
+        const gfsDeletions = roomFiles.map(({ _id }) =>
+          gfs.delete(new mongoose.Types.ObjectId(_id))
+        );
+
+        await Promise.all(gfsDeletions);
       }
-    );
-
-    await UserModel.findByIdAndUpdate(
-      friendId,
-      {
-        $pull: { friends: { _id: userId } },
-      },
-      {
-        session,
-      }
-    );
-
-    await RoomModel.findByIdAndDelete(roomId, { session });
-
-    const roomFiles = await gfs.find({ roomId }, { session }).toArray();
-
-    if (roomFiles.length) {
-      roomFiles.forEach(
-        async ({ _id }) => await gfs.delete(new mongoose.Types.ObjectId(_id))
-      );
-    }
-
-    await session.commitTransaction();
-    session.endSession();
-
-    res.json({ friends, accessToken });
+    });
   } catch (err) {
-    await session.abortTransaction();
     console.log(err);
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
+  } finally {
+    await session.endSession();
   }
 };

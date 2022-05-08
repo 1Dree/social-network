@@ -1,11 +1,12 @@
-module.exports = async function retrieveMsgs({ query, gfs }, res) {
-  const { filename } = query;
-  if (!filename) return res.sendStatus(400);
-
+module.exports = async function openFile({ params, gfs }, res) {
   try {
-    gfs.openDownloadStreamByName(filename).pipe(res);
+    const files = await gfs.find({ filename: params.filename }).toArray();
+    if (!files || !files.length) return res.json({ msg: "No file to show" });
+
+    gfs.openDownloadStreamByName(params.filename).pipe(res);
   } catch (err) {
     console.log(err);
-    res.json(err.message);
+
+    res.sendStatus(400);
   }
 };

@@ -1,19 +1,21 @@
-const sendMessage = require("./sendMessage");
 const retrieveMsgs = require("./retrieveMsgs");
 const hideMsg = require("./hideMsg");
 const deleteMsg = require("./deleteMsg");
-const onImgUpload = require("./onImgUpload");
+const onFileUpload = require("./onFileUpload");
 const toFile = require("./toFile");
 const removeFriend = require("./removeFriend");
-const downloadImg = require("./downloadImg");
+const onDownloadFile = require("./onDownloadFile");
+const downloadFile = require("./downloadFile");
+const retrieveContacts = require("./retrieveContacts");
 
 module.exports = {
-  sendMessage,
   retrieveMsgs,
   hideMsg,
   deleteMsg,
-  onImgUpload,
+  onFileUpload,
   toFile,
   removeFriend,
-  downloadImg,
+  onDownloadFile,
+  downloadFile,
+  retrieveContacts,
 };

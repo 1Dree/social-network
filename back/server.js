@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const cors = require("cors");
 
+const { authorization, renewAccess } = require("./controllers/auth");
+const chatControls = require("./controllers/chat");
+
 const accountRoute = require("./routes/account.js");
 const chatRoute = require("./routes/chat.js");
 const invitRoute = require("./routes/invit.js");
@@ -20,6 +23,7 @@ mongoose
   .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    // useFind
   })
   .then(() => {
     app.listen(3000, console.log("listenig"));

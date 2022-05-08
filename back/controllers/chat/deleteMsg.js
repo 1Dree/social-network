@@ -1,29 +1,44 @@
+const UserModel = require("../../models/UserModel");
 const RoomModel = require("../../models/RoomModel");
 const mongoose = require("mongoose");
 
-module.exports = async function retrieveMsgs({ body, gfs, accessToken }, res) {
+module.exports = async function deleteMsg({ body, gfs }, res) {
   const { roomId, messageInfo } = body;
   if (!roomId || !messageInfo) return res.sendStatus(400);
 
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  const options = { session };
+
   try {
-    const { messages } = await RoomModel.findByIdAndUpdate(
+    await UserModel.findOneAndUpdate(
+      { "friends.ltMsg.msgId": messageInfo._id },
+      { $unset: { "friends.$.ltMsg": "" } },
+      options
+    );
+
+    await RoomModel.findByIdAndUpdate(
       roomId,
       {
         $pull: { messages: { _id: messageInfo._id } },
       },
-      {
-        new: true,
-        select: "-_id messages",
-      }
+      options
     );
 
-    if (messageInfo.type === "file") {
-      await gfs.delete(new mongoose.Types.ObjectId(messageInfo.fileId));
+    if (messageInfo.type !== "text") {
+      const [{ _id }] = await gfs
+        .find({ roomId, filename: messageInfo.content }, options)
+        .toArray();
+
+      await gfs.delete(new mongoose.Types.ObjectId(_id));
     }
 
-    res.json({ messages, accessToken });
+    await session.commitTransaction();
+    session.endSession();
   } catch (err) {
     console.log(err);
-    res.json(err.message);
+    await session.abortTransaction();
+    res.status(500).json(err.message);
   }
 };

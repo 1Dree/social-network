@@ -5,17 +5,25 @@ const RefreshTokenModel = require("../../models/RefreshTokenModel");
 const assets = require("../../lib");
 
 module.exports = async function signup(req, res) {
-  const { userData } = req.body;
-  if (!userData) return res.sendStatus(400);
+  const loginData = req.body;
+  if (!loginData.login) return res.sendStatus(400);
 
-  //   res.json({ userData });
+  // res.json({ login });
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const [userDoc] = await UserModel.create([userData], { session });
-    const accessToken = assets.generateAccessToken(userDoc);
-    const refreshToken = assets.generateRefreshToken(userDoc);
+    const [userDoc] = await UserModel.create(
+      [{ ...loginData, mailbox: new mongoose.Types.ObjectId() }],
+      {
+        session,
+        select: "login.name login.email login.profile mailbox",
+      }
+    );
+    const [accessToken, refreshToken] = [
+      assets.generateAccessToken(userDoc._id),
+      assets.generateRefreshToken(userDoc._id),
+    ];
 
     await RefreshTokenModel.create(
       [
@@ -31,9 +39,13 @@ module.exports = async function signup(req, res) {
     session.endSession();
 
     res.json({
-      userData: assets.userCoreData(userDoc),
-      accessToken,
-      refreshToken,
+      _id: userDoc._id,
+      mailbox: userDoc.mailbox,
+      login: userDoc.login,
+      tokens: {
+        access: accessToken,
+        refresh: refreshToken,
+      },
     });
   } catch (err) {
     await session.abortTransaction();

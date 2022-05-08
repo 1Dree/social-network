@@ -12,51 +12,74 @@ module.exports = async function signout({ body, gfs }, res) {
   session.startTransaction();
 
   try {
-    const userDoc = await UserModel.findOne({ email: userData.email }, null, {
-      session,
-      projection: "password friends",
-    });
-    if (!userDoc) return json.sendStatus(404);
+    const userDoc = await UserModel.findOne(
+      { "login.email": userData.email },
+      null,
+      {
+        session,
+        projection: "login.password login.profile friends invitations",
+      }
+    );
+    if (!userDoc) return res.status(404).json("user not found");
 
-    const { _id: userId, password: passHash, friends } = userDoc;
+    const {
+      _id: userId,
+      login: { password: passHash, profile },
+      friends,
+      invitations: { sended, received },
+    } = userDoc;
     const passMatch = await bcrypt.compare(userData.password, passHash);
     if (!passMatch) res.status(400).json("wrong password");
 
     await UserModel.findByIdAndDelete(userId, { session });
     await RefreshTokenModel.findOneAndDelete({ userId }, { session });
 
-    if (friends.length) {
-      friends.forEach(async ({ _id, roomId }) => {
-        const friendDoc = await UserModel.findById(_id, null, { session });
+    if (profile !== "default") {
+      const [userPhoto] = await gfs
+        .find({ filename: profile }, { session })
+        .toArray();
 
-        if (friendDoc) {
-          await RoomModel.findByIdAndUpdate(
-            roomId,
-            {
-              $push: {
-                messages: {
-                  type: "notification",
-                  content: `${userData.name} não está mais no app.`,
-                  from: userId,
-                },
-              },
-            },
-            { session }
-          );
-        } else {
-          const roomFiles = await gfs.find({ roomId }, { session });
-
-          if (roomFiles.length) {
-            roomFiles.forEach(
-              async ({ _id }) =>
-                await gfs.delete(new mongoose.Types.ObjectId(_id))
-            );
-          }
-
-          await RoomModel.findByIdAndDelete(roomId, { session });
-        }
-      });
+      await gfs.delete(new mongoose.Types.ObjectId(userPhoto._id));
     }
+
+    const pullUser = arrayKey =>
+      UserModel.updateMany(
+        {},
+        {
+          $pull: {
+            [arrayKey]: {
+              _id: userId,
+            },
+          },
+        },
+        {
+          session,
+        }
+      );
+
+    if (friends.length) {
+      await pullUser("friends");
+
+      for ({ _id, chatRoom } of friends) {
+        const roomFiles = await gfs
+          .find({ roomId: chatRoom.toString() }, { session })
+          .toArray();
+
+        if (roomFiles.length) {
+          const gfsDeletions = roomFiles.map(({ _id }) =>
+            gfs.delete(new mongoose.Types.ObjectId(_id))
+          );
+
+          await Promise.all(gfsDeletions);
+        }
+
+        await RoomModel.findByIdAndDelete(chatRoom, { session });
+      }
+    }
+
+    if (sended.length) await pullUser("invitations.received");
+
+    if (received.length) await pullUser("invitations.sended");
 
     await session.commitTransaction();
     session.endSession();

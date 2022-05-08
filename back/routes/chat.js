@@ -14,16 +14,27 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-router.use(authorization, renewAccess);
+router.use(
+  // all except "download-file"
+  /\/(retrieve-contacts|send-message|retrieve-msgs|hide-msg|upload-file|delete-msg|remove-friend)/,
+  authorization
+);
 
-router.route("/send-message").put(chatControls.sendMessage);
+router.use(
+  // all except "download-file" and "delete-msg"
+  /\/(retrieve-contacts|send-message|retrieve-msgs|upload-file|remove-friend)/,
+  renewAccess
+);
+
+router.route("/retrieve-contacts").get(chatControls.retrieveContacts);
 router.route("/retrieve-msgs").get(chatControls.retrieveMsgs);
-router.route("/hide-msg").put(chatControls.hideMsg);
 router
-  .route("/upload-img")
-  .post(upload.single("image"), chatControls.onImgUpload);
+  .route("/upload-file")
+  .post(upload.single("file"), chatControls.onFileUpload);
 router.route("/delete-msg").delete(chatControls.deleteMsg);
 router.route("/remove-friend").delete(chatControls.removeFriend);
-router.route("/download-img").get(chatControls.downloadImg);
+router
+  .route("/download-file")
+  .get(chatControls.onDownloadFile, authorization, chatControls.downloadFile);
 
 module.exports = router;

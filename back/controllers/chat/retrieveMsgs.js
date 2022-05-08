@@ -1,7 +1,7 @@
 const RoomModel = require("../../models/RoomModel");
 
-module.exports = async function retrieveMsgs({ body, accessToken }, res) {
-  const { userId, roomId } = body;
+module.exports = async function retrieveMsgs({ query, accessToken }, res) {
+  const { userId, roomId } = query;
   if (!userId || !roomId) return res.sendStatus(400);
 
   try {

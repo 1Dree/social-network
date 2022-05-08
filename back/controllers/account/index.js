@@ -1,17 +1,23 @@
 const signup = require("./signup");
 const login = require("./login");
 const updateProfile = require("./updateProfile");
-const forgetPassword = require("./forgetPassword");
+const newPassword = require("./newPassword");
 const retrieve = require("./retrieve");
-const retrieveAll = require("./retrieveAll");
 const signout = require("./signout");
+const identification = require("./identification");
+const changePhoto = require("./changePhoto");
+const toPhoto = require("./toPhoto");
+const onVerifiedAccess = require("./onVerifiedAccess");
 
 module.exports = {
   signup,
   login,
   updateProfile,
-  forgetPassword,
+  newPassword,
   retrieve,
-  retrieveAll,
   signout,
+  identification,
+  changePhoto,
+  toPhoto,
+  onVerifiedAccess,
 };
