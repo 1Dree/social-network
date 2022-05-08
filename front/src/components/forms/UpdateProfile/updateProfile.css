@@ -1,0 +1,63 @@
+.form-wrapper.update {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  max-width: 700px;
+  height: 100%;
+}
+
+#form-slide {
+  display: flex;
+
+  width: 55%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#form-slide form {
+  flex: none;
+  transition: transform 0.3s;
+  padding: 0 2.5%;
+  height: fit-content;
+}
+
+#form-slide form.translate {
+  transform: translateX(-100%);
+}
+
+#form-slide #update-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 5px;
+  border: 1px solid rgb(2, 175, 206);
+  border-radius: 50%;
+  background-color: inherit;
+}
+
+#update-profile-btn:active {
+  transform: scale(0.95);
+}
+
+#update-profile-btn .MuiIcon-colorPrimary {
+  color: rgb(2, 175, 206);
+}
+
+#final-options p {
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 700px) {
+  .form#update-profile {
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: none;
+  }
+}

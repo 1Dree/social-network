@@ -1,0 +1,18 @@
+#exp-access-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    height: 100vh;
+    text-align: center;
+  }
+  
+  #exp-access-screen-content {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  #exp-access-screen-content h1 {
+    font-weight: normal;
+    margin-bottom: 10px;
+  }

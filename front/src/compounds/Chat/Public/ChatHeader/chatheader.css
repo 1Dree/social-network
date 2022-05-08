@@ -1,0 +1,30 @@
+#chat-header {
+  display: flex;
+  align-items: center;
+
+  padding: 0 2%;
+  /* height: 7%; */
+  background-color: rgb(2, 175, 206);
+}
+
+#friend-profile {
+  width: 40px;
+  height: 40px;
+}
+
+#friend-name {
+  flex: 1;
+
+  color: white;
+  font-weight: normal;
+  margin-left: 20px;
+}
+
+#chat-header .icon-wrapper {
+  color: white;
+  padding: 5px;
+}
+
+#chat-header .icon-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}

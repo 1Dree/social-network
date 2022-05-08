@@ -1,0 +1,17 @@
+.form-wrapper.new-pass {
+  height: 100%;
+}
+
+.form#new-pass {
+  padding-bottom: 40px;
+}
+
+.form#new-pass section {
+  display: grid;
+  grid-gap: 40px;
+}
+
+#new-pass section {
+  display: grid;
+  grid-gap: 20px;
+}

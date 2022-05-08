@@ -1,0 +1,33 @@
+.scroll-container {
+  position: relative;
+}
+
+.scroll-container-content {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scroll-container-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  pointer-events: none;
+  opacity: 0;
+  width: calc(100% - 10px);
+  height: 100%;
+  transition: opacity 0.5s;
+}
+
+.scroll-container-overlay.first {
+  background: linear-gradient(rgba(0, 0, 0, 0) 98%, rgba(0, 0, 0, 0.2));
+}
+
+.scroll-container-overlay.second {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0) 98%, rgba(0, 0, 0, 0.2));
+}
+
+.scroll-container-overlay.shadow {
+  opacity: 1;
+}

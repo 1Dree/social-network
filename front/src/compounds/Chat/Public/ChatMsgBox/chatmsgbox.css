@@ -1,0 +1,66 @@
+#chat-msg-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  z-index: 5;
+  padding: 0 15px;
+  background-color: rgb(250, 250, 250);
+}
+
+#chat-msg-box input {
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  outline: 0;
+  background-color: rgb(235, 235, 235);
+}
+
+#chat-msg-box .icon-wrapper {
+  padding: 5px;
+}
+
+#chat-msg-box .open-emoji-picker {
+  color: rgba(255, 183, 0, 0.7);
+}
+
+#chat-msg-box .open-emoji-picker:hover {
+  color: rgb(255, 183, 0);
+}
+
+#chat-msg-box .open-emoji-picker:active {
+  color: rgb(237, 176, 23);
+}
+
+#chat-msg-box .upload-img {
+  color: rgba(255, 111, 0, 0.7);
+}
+
+#chat-msg-box .upload-img:hover {
+  color: rgb(255, 111, 0);
+}
+
+#chat-msg-box .upload-video {
+  color: rgba(30, 255, 0, 0.7);
+}
+
+#chat-msg-box .upload-video :hover {
+  color: rgb(30, 255, 0);
+}
+
+#chat-msg-box .upload-img:active {
+  color: rgb(216, 94, 1);
+}
+
+#chat-msg-box .send-msg {
+  color: #ccc;
+}
+
+#chat-msg-box .send-msg:hover {
+  color: rgb(2, 175, 206);
+}
+
+#chat-msg-box .send-msg:active {
+  color: rgb(1, 145, 170);
+}

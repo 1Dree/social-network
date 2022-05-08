@@ -1,0 +1,71 @@
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  /* background-color: rgb(253, 253, 253); */
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.form-wrapper h1,
+.form-wrapper h2,
+.form-wrapper h3 {
+  color: rgb(80, 80, 80);
+}
+
+.form {
+  display: grid;
+  grid-gap: 40px;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.form .instruction {
+  font-weight: bold;
+  color: rgb(90, 90, 90);
+}
+
+.form .err-msg {
+  padding: 14px;
+  color: rgb(253, 49, 49);
+  background-color: rgba(253, 49, 49, 0.186);
+}
+
+.form input {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  background-color: rgb(235, 235, 235);
+  /* border-radius: 5px; */
+}
+
+.form input:invalid {
+  outline-color: rgb(255, 84, 84);
+}
+
+.form .form-btn {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  /* border-radius: 5px; */
+  color: white;
+  font-weight: bold;
+  background-color: rgb(2, 175, 206);
+}
+
+.form button:active {
+  transform: scale(0.99);
+}

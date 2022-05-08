@@ -1,0 +1,75 @@
+#account-page {
+  width: 100%;
+}
+
+#account-page-container {
+  display: grid;
+  align-items: center;
+  align-content: flex-start;
+  gap: 30px;
+
+  height: 85%;
+  /* padding: 20px; */
+  text-align: center;
+}
+
+#account-page-header {
+  padding: 10px 40px;
+  color: white;
+  /* text-align: left; */
+  background-color: rgb(2, 175, 206);
+}
+
+#account-page-content {
+  display: grid;
+  gap: 10px;
+
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#account-page-profile {
+  width: 200px;
+  height: 200px;
+}
+
+#account-page-content h2 {
+  font-weight: normal;
+}
+
+#account-page-actions ul {
+  align-self: end;
+  display: grid;
+  gap: 7px;
+
+  margin-top: 20px;
+  list-style: inside none;
+}
+
+#account-page-actions ul li {
+  cursor: pointer;
+  font-weight: bold;
+  color: rgb(100, 100, 100);
+}
+
+#account-page-actions ul li:hover {
+  color: #ccc;
+}
+
+#account-page-actions ul li#delete {
+  color: rgb(255, 50, 50);
+}
+
+#account-page-actions ul li#delete:hover {
+  color: rgb(255, 126, 126);
+}
+
+#account-page-actions ul li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#file {
+  display: none;
+}

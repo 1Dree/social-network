@@ -1,0 +1,28 @@
+#chat {
+  display: grid;
+  grid-template-rows: 8.5% 83% 8.5%;
+
+  height: 100%;
+  overflow: hidden;
+}
+
+#chat .emoji-picker-react {
+  position: absolute;
+  bottom: 8%;
+
+  width: 72.3%;
+  height: 0;
+  transition: height 0.3s ease;
+  box-shadow: none;
+}
+
+#chat.picker .emoji-picker-react {
+  /* bottom: 7%; */
+  height: 300px;
+  padding: 10px;
+}
+
+#chat .emoji-picker-react .emoji-categories,
+#chat .emoji-picker-react .active-category-indicator-wrapper {
+  display: none;
+}

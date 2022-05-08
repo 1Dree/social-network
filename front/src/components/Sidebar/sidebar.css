@@ -1,0 +1,32 @@
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: -100%;
+
+  z-index: 10;
+  width: 27%;
+  height: 100%;
+  transition: left 0.3s;
+  background-color: white;
+}
+
+.sidebar.slide {
+  left: 0;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: white;
+  height: 10%;
+  width: 100%;
+  padding: 0 5%;
+  background-color: rgb(2, 175, 206);
+}
+
+.sidebar-header h1 {
+  font-weight: normal;
+}

@@ -1,0 +1,42 @@
+.contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /* cursor: pointer; */
+  height: 65px;
+  padding: 0 5%;
+
+  transition: height 0.3s;
+  border-top: 2px solid rgb(235, 235, 235);
+  background-color: rgb(245, 245, 245);
+}
+
+.contact:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+.contact-profile {
+  width: 45px;
+  height: 45px;
+}
+
+.contact-name {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.contact-invit {
+  cursor: pointer;
+  display: block;
+  border: 0;
+  padding: 5px 15px;
+  color: white;
+  font-weight: bold;
+  background-color: rgb(2, 175, 206);
+}
+
+.contact-invit:disabled {
+  cursor: not-allowed;
+  background-color: rgba(2, 175, 206, 0.4);
+}

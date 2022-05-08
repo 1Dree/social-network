@@ -1,0 +1,87 @@
+#chat-file-uploader.submiting {
+  pointer-events: none;
+}
+
+.overlay-content#chat-file-uploader-content {
+  padding: 30px;
+  background-color: rgb(250, 250, 250);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#chat-file-uploader-content form {
+  display: grid;
+  gap: 30px;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+
+  width: 300px;
+  margin: 0 auto;
+}
+
+#chat-file-uploader-file {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 300px;
+  /* padding: 30px; */
+  background-color: rgb(240, 240, 240);
+}
+
+#chat-file-uploader-file video {
+  width: 100%;
+}
+
+#chat-file-uploader-file input {
+  display: none;
+}
+
+#chat-file-uploader-file .MuiSvgIcon-root {
+  width: 100px;
+  height: 100px;
+  color: gray;
+}
+
+#chat-file-uploader-file .MuiSvgIcon-root:hover {
+  color: rgb(2, 175, 206);
+}
+
+/* #chat-file-uploader-file .choosen-img {
+  width: 100%;
+  height: 100%;
+} */
+
+#chat-file-uploader-input-btn {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto auto;
+
+  width: 100%;
+}
+
+#chat-file-uploader-input-btn input {
+  padding: 10px;
+  border: 0;
+  outline: 0;
+  background-color: rgb(235, 235, 235);
+}
+
+#chat-file-uploader-btn {
+  border: 0;
+  background-color: white;
+}
+
+#chat-file-uploader-btn:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+#chat-file-uploader-btn .uploader-btn {
+  color: gray;
+  padding: 5px;
+}
+
+#chat-file-uploader-btn .uploader-btn:hover {
+  color: rgb(2, 175, 206);
+}

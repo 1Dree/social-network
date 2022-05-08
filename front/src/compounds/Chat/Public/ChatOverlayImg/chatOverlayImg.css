@@ -1,0 +1,8 @@
+#chat-overlay-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
+  background-color: white;
+}
